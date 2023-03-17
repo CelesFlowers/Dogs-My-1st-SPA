@@ -1,10 +1,7 @@
 const { Router } = require("express");
-const {
-  get_allDogsApi,
-  get_allDogsDb,
-  get_allDogs,  
-} = require("../controllers/dogs");
+const { get_allDogs} = require("../controllers/dogs");
 const { Dog, Temperament } = require("../db.js");
+const axios = require ("axios")
 
 const router = Router();
 
@@ -20,7 +17,27 @@ router.get("/", async (req, res) => {
     res.status(200).send(totalDogs) 
   }
 })
+
+router.post ("/", async (req, res)=> {
+  const {name, height, weight, life_span, image, temperament, createdInDb} = req.body;
+
+  const dogCreated = await Dog.create ({
+    name,
+    height,
+    weight,
+    life_span,
+    image,
+    createdInDb,
+  })
+
+  let temperamentdb = await Temperament.findAll({
+    where: {name : temperament}
+  })
+
+  dogCreated.addTemperament(temperamentdb)
   
+})
+  /////////////////////////////////////////////////////////////////////////////////
 
 // router.get("/:id", async (req, res) => {
 //   const { id } = req.params;
@@ -34,37 +51,24 @@ router.get("/", async (req, res) => {
 //   }
 // });
 
-// router.post("/", async (req, res) => {
-//   const { name, image, weight, height, life_span, temperament } =
-//     req.body;
+///////////////////////////////////////////////////////////////////
 
-//     const createdInDb = true
+// router.post('/', async (req, res) => {
+//   const {name, height, weight, life_span, image, temperament, createInDb} = req.body;
 
 //   try {
-//     const result = await Dog.create({
-//       name,
-//       image,
-//       weight,
-//       height,
-//       life_span,      
-//       temperament,
-//       createdInDb
-//     });
-
-//     temperament.forEach(async (element) => {
-//       const [temperament, created] = await Temperament.findOrCreate({
-//         where: {
-//           name: [element],
-//         },
-//       });
-//       await result.addTemperament(temperament);
-//       console.log(created);
-//     });
-//     res.status(200).send(result);
+//     if (!name || !height || !weight || !life_span || !image || !temperament) {
+//       throw Error ('Missing Field');
+//     } else {
+//       const newDog = await createDog(name, height, weight, life_span, image, createInDb, temperament);
+//       res.status(200).json(newDog);
+//     }
+    
 //   } catch (error) {
 //     res.status(404).send(error.message);
 //   }
 // });
+
 
 
 module.exports = router;
