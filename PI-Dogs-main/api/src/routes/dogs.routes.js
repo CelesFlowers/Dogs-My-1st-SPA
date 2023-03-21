@@ -35,39 +35,23 @@ router.post ("/", async (req, res)=> {
   })
 
   dogCreated.addTemperament(temperamentdb)
+  res.status(200).send("Dog created succesfully!")
   
 })
-  /////////////////////////////////////////////////////////////////////////////////
+  
 
-// router.get("/:id", async (req, res) => {
-//   const { id } = req.params;
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
 
-//   try {
-//       const res2 = await get_oneDogDb(id);
-//       console.log(res2);
-//       res.status(200).send(res2);
-//   } catch (error) {
-//     res.status(400).send(error);
-//   }
-// });
+       const res2 = await get_allDogs();
+       if (id){
+        let dogId = await res2.filter(el => el.id == id)
+        dogId.length?
+        res.status(200).json(dogId):
+        res.status(404).send('id not found')
+       }
+  })
 
-///////////////////////////////////////////////////////////////////
-
-// router.post('/', async (req, res) => {
-//   const {name, height, weight, life_span, image, temperament, createInDb} = req.body;
-
-//   try {
-//     if (!name || !height || !weight || !life_span || !image || !temperament) {
-//       throw Error ('Missing Field');
-//     } else {
-//       const newDog = await createDog(name, height, weight, life_span, image, createInDb, temperament);
-//       res.status(200).json(newDog);
-//     }
-    
-//   } catch (error) {
-//     res.status(404).send(error.message);
-//   }
-// });
 
 
 
