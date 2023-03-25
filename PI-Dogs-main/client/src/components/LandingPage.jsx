@@ -5,12 +5,16 @@ import "../LandingPage/ButtonHome.css"
 
 function LandingPage() {
   return (    
-      <div>
-        <h1>Dog Breed Pedia</h1>
+      <div className={`${style.main_left_container}`}>
+        <h1 className={`${style.titleApp}`} >DOG BREED PEDIA</h1>
+        <h3>Learn more about your best friend</h3>
+        <div className={`${style.left_paragraph}`}>
+          <p> Whith this app you can get information about dog breeds' names and details such as their size, life span and temperament, and you can also add new ones</p>        
         
         <Link to="/home">
-            <button >Go home</button>
-        </Link>      
+            <button className="button_home">Go home</button>
+        </Link>
+      </div>
     </div>
   );
 }
